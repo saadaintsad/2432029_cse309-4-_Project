@@ -25,28 +25,29 @@ export default async function HomePage() {
     <main className="flex min-h-screen flex-col bg-white font-inter">
       <PublicHeader />
 
-      {/* Hero — full viewport height (or 600px, whichever is larger) */}
-      <section className="relative flex min-h-[max(100vh,600px)] flex-col overflow-hidden bg-gradient-to-b from-[#fdf8f4] to-[#fef3e8] lg:flex-row">
+      {/* Hero — compact, so the hero + top of Featured Collections both fit
+          on first load without scrolling (matches reference1.jpg's proportions) */}
+      <section className="relative flex min-h-[430px] flex-col overflow-hidden bg-gradient-to-b from-[#fdf8f4] to-[#fef3e8] lg:flex-row">
         <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col lg:flex-row">
           {/* Text content — 55% on desktop */}
-          <div className="flex w-full flex-col items-center justify-center px-6 py-10 text-center lg:w-[55%] lg:items-start lg:justify-start lg:px-10 lg:pt-[25vh] lg:text-left">
-            <h1 className="text-[32px] font-bold leading-tight text-slate-900 lg:text-[48px]">
+          <div className="flex w-full flex-col items-center justify-center px-6 py-6 text-center lg:w-[55%] lg:items-start lg:justify-start lg:px-10 lg:pt-10 lg:text-left">
+            <h1 className="text-[28px] font-bold leading-tight text-slate-900 lg:text-[48px]">
               {shop.shop_name}
             </h1>
-            <p className="mt-2 text-base font-semibold text-amber-700 sm:text-lg">
+            <p className="mt-1 text-sm font-semibold text-amber-700 sm:text-base">
               Wholesale Cloth Merchants — Islampur, Old Dhaka
             </p>
             <h2
               lang="bn"
-              className="mt-6 max-w-xl font-hind-siliguri text-[32px] font-bold leading-tight tracking-tight text-slate-900 lg:text-[52px]"
+              className="mt-3 max-w-xl font-hind-siliguri text-[28px] font-bold leading-tight tracking-tight text-slate-900 lg:text-[39px]"
             >
               সাশ্রয়ী দামে প্রিমিয়াম পাইকারি কাপড়
             </h2>
-            <p lang="bn" className="mt-4 max-w-xl font-hind-siliguri text-slate-600 sm:text-lg">
+            <p lang="bn" className="mt-2 max-w-xl font-hind-siliguri text-sm text-slate-600 sm:text-base">
               ইসলামপুরের শতভাগ মানসম্মত পপলিন, ভয়েল, লিনেন ও বেক্সি ভয়েল কাপড়ের
               পাইকারি বুকিং ও সার্বক্ষণিক স্টক আপডেট।
             </p>
-            <div className="mt-8 flex w-full flex-col gap-3 lg:w-auto lg:flex-row">
+            <div className="mt-4 flex w-full flex-col gap-2.5 lg:w-auto lg:flex-row">
               <Link href="/browse" className="w-full lg:w-auto">
                 <Button className="w-full px-8 py-[14px] text-base lg:w-auto">
                   Browse Stock Catalog
@@ -60,15 +61,16 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Model images — 45% on desktop, anchored to the bottom edge */}
-          <div className="relative order-first h-[300px] w-full lg:order-2 lg:h-auto lg:w-[45%]">
+          {/* Model images — 45% on desktop, anchored to the bottom edge, full
+              image visible (contain) so heads stay in frame near the top */}
+          <div className="relative order-first h-[240px] w-full lg:order-2 lg:h-auto lg:w-[45%]">
             <Image
               src="/images/img04.png"
               alt="New N Islam wholesale cloth collection — models wearing our fabrics"
               fill
               priority
               sizes="(min-width: 1024px) 45vw, 100vw"
-              className="object-cover object-top lg:object-contain lg:object-bottom"
+              className="object-contain object-bottom"
             />
           </div>
         </div>
@@ -78,8 +80,8 @@ export default async function HomePage() {
       <div className="mx-auto h-px w-full max-w-7xl bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
 
       {/* Featured Collections */}
-      <section className="mx-auto w-full max-w-7xl px-6 py-12">
-        <h2 className="mb-8 text-center text-2xl font-bold text-slate-900 sm:text-3xl">
+      <section className="mx-auto w-full max-w-7xl px-6 py-8">
+        <h2 className="mb-5 text-center text-2xl font-bold text-slate-900 sm:text-3xl">
           Featured Collections
         </h2>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -105,9 +107,9 @@ export default async function HomePage() {
       </section>
 
       {/* Track Order */}
-      <section className="mx-auto w-full max-w-3xl px-6 pb-12">
-        <Card className="border-amber-100 p-6 shadow-md sm:p-8">
-          <div className="mb-5 flex items-start gap-4">
+      <section className="mx-auto w-full max-w-3xl px-6 pb-8">
+        <Card className="border-amber-100 p-5 shadow-md sm:p-6">
+          <div className="mb-4 flex items-start gap-4">
             <div className="shrink-0 rounded-xl bg-amber-50 p-3.5 text-amber-700">
               <Search size={22} />
             </div>
@@ -124,8 +126,8 @@ export default async function HomePage() {
       </section>
 
       {/* Feature highlights */}
-      <section className="mx-auto w-full max-w-5xl px-6 pb-14">
-        <div className="grid gap-6 sm:grid-cols-3">
+      <section className="mx-auto w-full max-w-5xl px-6 pb-10">
+        <div className="grid gap-5 sm:grid-cols-3">
           <Card className="border-amber-100/70 shadow-sm">
             <PackageSearch className="mb-3 text-amber-700" size={28} />
             <h3 className="font-semibold text-slate-900">Live Stock Catalog</h3>
@@ -154,7 +156,7 @@ export default async function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-slate-200 bg-white px-6 py-8 text-center">
+      <footer className="mt-auto border-t border-slate-200 bg-white px-6 py-6 text-center">
         <p className="text-sm font-semibold text-slate-900">{shop.shop_name}</p>
         <div className="mt-2 flex flex-col items-center justify-center gap-1 text-sm text-slate-500 sm:flex-row sm:gap-4">
           <span className="inline-flex items-center gap-1.5">
