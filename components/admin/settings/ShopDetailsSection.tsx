@@ -10,6 +10,8 @@ export function ShopDetailsSection() {
   const [shopName, setShopName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [ownerName, setOwnerName] = useState("");
+  const [aboutUs, setAboutUs] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -26,6 +28,8 @@ export function ShopDetailsSection() {
         setShopName(json.settings.shop_name);
         setPhone(json.settings.phone);
         setAddress(json.settings.address);
+        setOwnerName(json.settings.owner_name);
+        setAboutUs(json.settings.about_us);
       })
       .catch(() => setError("Network error while loading shop details."))
       .finally(() => setLoading(false));
@@ -41,7 +45,13 @@ export function ShopDetailsSection() {
       const res = await fetch("/api/settings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ shop_name: shopName, phone, address }),
+        body: JSON.stringify({
+          shop_name: shopName,
+          phone,
+          address,
+          owner_name: ownerName,
+          about_us: aboutUs,
+        }),
       });
       const data = await res.json();
 
@@ -53,6 +63,8 @@ export function ShopDetailsSection() {
       setShopName(data.settings.shop_name);
       setPhone(data.settings.phone);
       setAddress(data.settings.address);
+      setOwnerName(data.settings.owner_name);
+      setAboutUs(data.settings.about_us);
       setSuccess(true);
     } catch {
       setError("Network error. Please try again.");
@@ -61,11 +73,16 @@ export function ShopDetailsSection() {
     }
   }
 
+  function markDirty() {
+    setSuccess(false);
+  }
+
   return (
     <Card>
       <h2 className="mb-1 text-base font-semibold text-slate-900">Shop Details</h2>
       <p className="mb-4 text-xs text-slate-500">
-        Used throughout the app, including the landing page and generated PDFs.
+        Used throughout the app, including the landing page, the About Us modal,
+        and generated PDFs.
       </p>
 
       {loading ? (
@@ -81,7 +98,16 @@ export function ShopDetailsSection() {
             value={shopName}
             onChange={(e) => {
               setShopName(e.target.value);
-              setSuccess(false);
+              markDirty();
+            }}
+          />
+          <Input
+            label="Owner Name"
+            required
+            value={ownerName}
+            onChange={(e) => {
+              setOwnerName(e.target.value);
+              markDirty();
             }}
           />
           <Input
@@ -91,7 +117,7 @@ export function ShopDetailsSection() {
             value={phone}
             onChange={(e) => {
               setPhone(e.target.value);
-              setSuccess(false);
+              markDirty();
             }}
           />
           <Input
@@ -100,9 +126,25 @@ export function ShopDetailsSection() {
             value={address}
             onChange={(e) => {
               setAddress(e.target.value);
-              setSuccess(false);
+              markDirty();
             }}
           />
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-slate-700">About Us</label>
+            <textarea
+              required
+              rows={4}
+              value={aboutUs}
+              onChange={(e) => {
+                setAboutUs(e.target.value);
+                markDirty();
+              }}
+              className="rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-600/30"
+            />
+            <p className="text-xs text-slate-500">
+              Shown in the About Us modal on the customer landing page.
+            </p>
+          </div>
           <Button type="submit" loading={submitting} className="w-fit">
             Save Shop Details
           </Button>

@@ -13,7 +13,8 @@ import { Alert } from "@/components/ui/Alert";
 function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") ?? "/account";
+  const redirectTo = searchParams.get("redirectTo") ?? "/";
+  const infoMessage = searchParams.get("message");
 
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -50,6 +51,12 @@ function SignInForm() {
     <Card>
       <h1 className="mb-1 text-xl font-semibold text-slate-900">Sign in</h1>
       <p className="mb-6 text-sm text-slate-500">New N Islam — Islampur, Old Dhaka</p>
+
+      {!error && infoMessage && (
+        <Alert variant="info" className="mb-4">
+          {infoMessage}
+        </Alert>
+      )}
 
       {error && (
         <Alert variant="error" className="mb-4">

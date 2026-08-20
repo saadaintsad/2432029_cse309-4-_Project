@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { PublicHeader } from "@/components/public/PublicHeader";
 import { TrackOrderInline } from "@/components/public/TrackOrderInline";
+import { AboutUsButton } from "@/components/public/AboutUsButton";
 import { getShopSettings } from "@/lib/shop-settings";
 
 // shop_settings changes (Settings -> Shop Details) must show up immediately
@@ -53,11 +54,13 @@ export default async function HomePage() {
                   Browse Stock Catalog
                 </Button>
               </Link>
-              <Link href="/signup" className="w-full lg:w-auto">
-                <Button variant="secondary" className="w-full px-8 py-[14px] text-base lg:w-auto">
-                  Create an Account
-                </Button>
-              </Link>
+              <AboutUsButton
+                shopName={shop.shop_name}
+                ownerName={shop.owner_name}
+                phone={shop.phone}
+                address={shop.address}
+                aboutUs={shop.about_us}
+              />
             </div>
           </div>
 

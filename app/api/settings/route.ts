@@ -32,6 +32,8 @@ export async function PATCH(request: NextRequest) {
   const shopName = typeof body.shop_name === "string" ? body.shop_name.trim() : "";
   const phoneRaw = typeof body.phone === "string" ? body.phone.trim() : "";
   const address = typeof body.address === "string" ? body.address.trim() : "";
+  const ownerName = typeof body.owner_name === "string" ? body.owner_name.trim() : "";
+  const aboutUs = typeof body.about_us === "string" ? body.about_us.trim() : "";
 
   if (!shopName) return NextResponse.json({ error: "Shop name is required." }, { status: 400 });
   if (!isValidBdPhone(phoneRaw)) {
@@ -41,6 +43,8 @@ export async function PATCH(request: NextRequest) {
     );
   }
   if (!address) return NextResponse.json({ error: "Address is required." }, { status: 400 });
+  if (!ownerName) return NextResponse.json({ error: "Owner name is required." }, { status: 400 });
+  if (!aboutUs) return NextResponse.json({ error: "About Us text is required." }, { status: 400 });
 
   const supabase = createServiceRoleClient();
   const { data, error } = await supabase
@@ -49,10 +53,12 @@ export async function PATCH(request: NextRequest) {
       shop_name: shopName,
       phone: normalizePhone(phoneRaw),
       address,
+      owner_name: ownerName,
+      about_us: aboutUs,
       updated_at: new Date().toISOString(),
     })
     .eq("id", "00000000-0000-0000-0000-000000000000")
-    .select("shop_name, phone, address")
+    .select("shop_name, phone, address, owner_name, about_us")
     .single();
 
   if (error || !data) {

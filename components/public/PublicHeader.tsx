@@ -44,8 +44,15 @@ export function PublicHeader() {
         <Link href="/" className="hover:text-slate-900">
           Home
         </Link>
-        <Link href="/browse" className="hover:text-slate-900">
-          Browse Stock
+        <Link
+          href={
+            customerName
+              ? "/account"
+              : "/signin?redirectTo=/account&message=Please+sign+in+to+view+your+account"
+          }
+          className="hover:text-slate-900"
+        >
+          My Account
         </Link>
         <Link href="/track" className="hover:text-slate-900">
           Track Order
