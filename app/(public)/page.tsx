@@ -22,96 +22,71 @@ export default async function HomePage() {
   const shop = await getShopSettings();
 
   return (
-    <main className="flex min-h-screen flex-col bg-white">
+    <main className="flex min-h-screen flex-col bg-white font-inter">
       <PublicHeader />
 
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-white">
-        <div
-          className="pointer-events-none absolute inset-0 -z-10"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 85% 20%, rgba(180,83,9,0.07), transparent 45%), radial-gradient(circle at 10% 85%, rgba(180,83,9,0.05), transparent 40%)",
-          }}
-        />
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-14 sm:py-20 lg:grid-cols-2 lg:gap-8 lg:py-28">
-          {/* Text content */}
-          <div className="order-2 flex flex-col items-center text-center lg:order-1 lg:items-start lg:text-left">
-            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+      {/* Hero — full viewport height (or 600px, whichever is larger) */}
+      <section className="relative flex min-h-[max(100vh,600px)] flex-col overflow-hidden bg-gradient-to-b from-[#fdf8f4] to-[#fef3e8] lg:flex-row">
+        <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col lg:flex-row">
+          {/* Text content — 55% on desktop */}
+          <div className="flex w-full flex-col items-center justify-center px-6 py-10 text-center lg:w-[55%] lg:items-start lg:justify-start lg:px-10 lg:pt-[25vh] lg:text-left">
+            <h1 className="text-[32px] font-bold leading-tight text-slate-900 lg:text-[48px]">
               {shop.shop_name}
             </h1>
             <p className="mt-2 text-base font-semibold text-amber-700 sm:text-lg">
               Wholesale Cloth Merchants — Islampur, Old Dhaka
             </p>
-            <h2 className="mt-6 max-w-xl text-3xl font-extrabold leading-snug tracking-tight text-slate-900 sm:text-4xl lg:text-[2.75rem]">
+            <h2
+              lang="bn"
+              className="mt-6 max-w-xl font-hind-siliguri text-[32px] font-bold leading-tight tracking-tight text-slate-900 lg:text-[52px]"
+            >
               সাশ্রয়ী দামে প্রিমিয়াম পাইকারি কাপড়
             </h2>
-            <p className="mt-4 max-w-xl text-slate-600 sm:text-lg">
+            <p lang="bn" className="mt-4 max-w-xl font-hind-siliguri text-slate-600 sm:text-lg">
               ইসলামপুরের শতভাগ মানসম্মত পপলিন, ভয়েল, লিনেন ও বেক্সি ভয়েল কাপড়ের
               পাইকারি বুকিং ও সার্বক্ষণিক স্টক আপডেট।
             </p>
-            <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-              <Link href="/browse" className="w-full sm:w-auto">
-                <Button className="w-full px-8 py-3 sm:w-auto">Browse Stock Catalog</Button>
+            <div className="mt-8 flex w-full flex-col gap-3 lg:w-auto lg:flex-row">
+              <Link href="/browse" className="w-full lg:w-auto">
+                <Button className="w-full px-8 py-[14px] text-base lg:w-auto">
+                  Browse Stock Catalog
+                </Button>
               </Link>
-              <Link href="/signup" className="w-full sm:w-auto">
-                <Button variant="secondary" className="w-full px-8 py-3 sm:w-auto">
+              <Link href="/signup" className="w-full lg:w-auto">
+                <Button variant="secondary" className="w-full px-8 py-[14px] text-base lg:w-auto">
                   Create an Account
                 </Button>
               </Link>
             </div>
           </div>
 
-          {/* Model images */}
-          <div className="order-1 lg:order-2">
-            {/* Mobile: single centered image above the text */}
-            <div className="relative mx-auto aspect-square w-56 sm:w-72 lg:hidden">
-              <Image
-                src="/images/img04.png"
-                alt="New N Islam wholesale cloth collection"
-                fill
-                priority
-                sizes="(max-width: 1024px) 60vw, 0px"
-                className="object-contain"
-              />
-            </div>
-
-            {/* Desktop/tablet: 2 images arranged overlapping */}
-            <div className="relative mx-auto hidden aspect-square max-w-lg lg:block">
-              <div className="absolute left-0 top-4 h-[80%] w-[52%] drop-shadow-xl">
-                <Image
-                  src="/images/img03.png"
-                  alt="New N Islam premium fabric — model portrait"
-                  fill
-                  sizes="(min-width: 1024px) 26vw, 0px"
-                  className="object-contain object-bottom"
-                />
-              </div>
-              <div className="absolute bottom-0 right-0 h-[92%] w-[72%] drop-shadow-2xl">
-                <Image
-                  src="/images/img04.png"
-                  alt="New N Islam wholesale cloth collection"
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 36vw, 0px"
-                  className="object-contain object-bottom"
-                />
-              </div>
-            </div>
+          {/* Model images — 45% on desktop, anchored to the bottom edge */}
+          <div className="relative order-first h-[300px] w-full lg:order-2 lg:h-auto lg:w-[45%]">
+            <Image
+              src="/images/img04.png"
+              alt="New N Islam wholesale cloth collection — models wearing our fabrics"
+              fill
+              priority
+              sizes="(min-width: 1024px) 45vw, 100vw"
+              className="object-cover object-top lg:object-contain lg:object-bottom"
+            />
           </div>
         </div>
       </section>
 
+      {/* Thin decorative divider */}
+      <div className="mx-auto h-px w-full max-w-7xl bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
+
       {/* Featured Collections */}
-      <section className="mx-auto w-full max-w-6xl px-6 py-14 sm:py-16">
+      <section className="mx-auto w-full max-w-7xl px-6 py-12">
         <h2 className="mb-8 text-center text-2xl font-bold text-slate-900 sm:text-3xl">
           Featured Collections
         </h2>
-        <div className="grid gap-6 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
           {COLLECTIONS.map((c) => (
             <div
               key={c.name}
-              className="group relative aspect-[4/5] overflow-hidden rounded-2xl shadow-md"
+              className="group relative h-[280px] w-full overflow-hidden rounded-xl shadow-md"
             >
               <Image
                 src={c.image}
@@ -122,7 +97,7 @@ export default async function HomePage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-5">
-                <p className="text-lg font-bold text-white sm:text-xl">{c.name}</p>
+                <p className="text-[20px] font-bold text-white">{c.name}</p>
               </div>
             </div>
           ))}
@@ -130,7 +105,7 @@ export default async function HomePage() {
       </section>
 
       {/* Track Order */}
-      <section className="mx-auto w-full max-w-3xl px-6 py-4">
+      <section className="mx-auto w-full max-w-3xl px-6 pb-12">
         <Card className="border-amber-100 p-6 shadow-md sm:p-8">
           <div className="mb-5 flex items-start gap-4">
             <div className="shrink-0 rounded-xl bg-amber-50 p-3.5 text-amber-700">
@@ -149,7 +124,7 @@ export default async function HomePage() {
       </section>
 
       {/* Feature highlights */}
-      <section className="mx-auto w-full max-w-5xl px-6 py-14 sm:py-16">
+      <section className="mx-auto w-full max-w-5xl px-6 pb-14">
         <div className="grid gap-6 sm:grid-cols-3">
           <Card className="border-amber-100/70 shadow-sm">
             <PackageSearch className="mb-3 text-amber-700" size={28} />

@@ -1,7 +1,13 @@
+import { twMerge } from "tailwind-merge";
 import { CUSTOMER_AUTH_EMAIL_DOMAIN } from "./constants";
 
+// Plain string-join can't resolve conflicting utilities (e.g. a component's
+// base "shadow-sm" vs. a caller's "shadow-md") — whichever ends up later in
+// Tailwind's generated stylesheet wins, not whichever is later in this
+// string, so overrides could silently fail to apply. twMerge resolves that
+// correctly by understanding which classes are mutually exclusive.
 export function cn(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(" ");
+  return twMerge(classes.filter(Boolean).join(" "));
 }
 
 export function formatCurrency(amount: number): string {
