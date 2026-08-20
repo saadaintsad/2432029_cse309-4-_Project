@@ -199,13 +199,6 @@ export interface ShopSettings {
   updated_at: string;
 }
 
-export interface LandingImage {
-  id: string;
-  image_url: string;
-  display_order: number;
-  created_at: string;
-}
-
 // Admin session JWT payload
 export interface AdminSessionPayload {
   sub: string; // admin.id

@@ -41,3 +41,7 @@ next-env.d.ts
 .vscode/
 .idea/
 Thumbs.db
+
+# local design-reference screenshots, not site assets (see public/images for
+# the actual images used by the app)
+/importantJPGs/
