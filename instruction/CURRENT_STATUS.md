@@ -1,7 +1,11 @@
 Last Updated: August 21, 2026
 Completed Phases: Phase 0 through Phase 8, plus pre-Phase-9 fixes below. Every spec module is built.
 Current Phase: Phase 9 — Final Testing (not started) — the last phase in the entire spec.
-Last Thing Done: Repository is now on GitHub (git init + push done this session — see below), and the customer landing page was rebuilt from scratch using real product photography you supplied in importantJPGs/ (7 real assets: 4 transparent-background model PNGs, 3 fabric JPGs — the 3 reference*.jpg files in that folder were your design mockups for me to look at, not site assets, so they stayed out of the app and out of git).
+Last Thing Done: Refined the landing page hero to an exact pixel-level design spec you gave after seeing the first photography-based redesign — full-viewport hero (55/45 text/model split, model image anchored to the bottom edge as the visual anchor), 48px/52px headline sizes (32px Bengali on mobile), 14px/32px button padding, 280px landscape Featured Collections cards, 1280px max content width, warm gradient background, thin amber divider before Collections. Added Inter + Hind Siliguri via next/font/google with lang="bn" on the Bengali elements. Pushed to GitHub (commit e8693a7) after you reviewed Playwright screenshots at 1280px and 375px and confirmed.
+
+  Real bug fixed along the way: while wiring the exact button padding (14px 32px), found the shared `cn()` utility in lib/utils.ts (used by every Button/Card/etc. across the whole app) was doing plain string-join instead of real Tailwind class merging — a caller's override wasn't guaranteed to beat a component's built-in classes (e.g. Button's own `py-2` vs. a page's `py-[14px]`), since with plain concatenation the winner depends on Tailwind's internal stylesheet generation order, not source order in the className string. Fixed at the source with `tailwind-merge` rather than patching this one page with `!important`, since the same silent-override risk existed everywhere else in the app too. Re-ran tsc/lint and a full page-by-page regression sweep after that change (shared-utility changes are exactly the kind of thing that can quietly break unrelated pages) — everything still green.
+
+  VERIFIED with real Playwright measurements, not just visual inspection: computed font sizes (48px/52px desktop, 32px mobile), computed font-family (confirms Hind Siliguri is actually applied, not just imported), the `lang="bn"` attribute, and computed button padding (confirmed exactly "14px 32px" — direct proof the tailwind-merge fix works) were all read via `getComputedStyle` in the browser, not assumed from the source code. Zero horizontal overflow at 1280px or 375px, zero console/page errors. Screenshots taken and shown to you before pushing, per your instruction; you reviewed and said to proceed.
 
   Git: initialized the repo, reviewed the .gitignore (create-next-app's default already covered node_modules/.next/.env.local), pushed the initial 127-file commit to https://github.com/saadaintsad/2432029_cse309-4-_Project, confirmed the target repo was genuinely empty first so there was no risk of overwriting anything. This session added a second commit on top for the landing page redesign — also verified pushed and matching origin/main exactly.
 
@@ -159,6 +163,11 @@ Files Modified This Session:
   - components/admin/settings/LandingImagesSection.tsx (deleted)
   - types/index.ts (removed the now-unused LandingImage interface)
   - public/images/{img01.png, img02.png, img03.png, img04.png, poplin.jpg, chapa.jpg, Cotton-Voile-Fabric.jpg} (new — moved from importantJPGs/)
+  - app/(public)/page.tsx (hero rebuilt again to the exact pixel spec above)
+  - app/layout.tsx (added Inter + Hind Siliguri via next/font/google)
+  - tailwind.config.ts (registered font-inter / font-hind-siliguri utilities)
+  - lib/utils.ts (bug fix — cn() now uses tailwind-merge instead of plain string concatenation)
+  - package.json, package-lock.json (added tailwind-merge)
 Reference Files:
   - instruction/NewNIslam_Spec_v2.md — primary implementation guide
   - instruction/New N Islam — Complete Implementation Spec — business context
