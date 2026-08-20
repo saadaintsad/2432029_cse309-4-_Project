@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { createServerSupabaseClient, createServiceRoleClient } from "@/lib/supabase-server";
 import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { LogoutButton } from "@/components/public/LogoutButton";
 
 const STATUS_LABEL: Record<string, string> = {
   PENDING: "Pending",
@@ -55,7 +56,12 @@ export default async function AccountPage() {
           <h1 className="text-xl font-semibold text-slate-900">My Account</h1>
           <p className="text-sm text-slate-500">{customer.customer_id}</p>
         </div>
-        <LogoutButton />
+        <Link href="/">
+          <Button variant="secondary" className="inline-flex items-center gap-1.5">
+            <ArrowLeft size={16} />
+            Back
+          </Button>
+        </Link>
       </div>
 
       <Card className="mb-6">

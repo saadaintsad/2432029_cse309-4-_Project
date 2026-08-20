@@ -54,9 +54,6 @@ export function PublicHeader() {
         >
           My Account
         </Link>
-        <Link href="/track" className="hover:text-slate-900">
-          Track Order
-        </Link>
 
         {checking ? null : customerName ? (
           <>
