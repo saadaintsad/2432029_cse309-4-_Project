@@ -41,11 +41,11 @@ export function FeaturedCollectionsCarousel() {
   }, [maxIndex]);
 
   function goPrev() {
-    setIndex((i) => Math.max(0, i - 1));
+    setIndex((i) => (i === 0 ? maxIndex : i - 1));
   }
 
   function goNext() {
-    setIndex((i) => Math.min(maxIndex, i + 1));
+    setIndex((i) => (i === maxIndex ? 0 : i + 1));
   }
 
   function handleTouchStart(e: TouchEvent<HTMLDivElement>) {
@@ -73,8 +73,7 @@ export function FeaturedCollectionsCarousel() {
           type="button"
           aria-label="Previous collections"
           onClick={goPrev}
-          disabled={index === 0}
-          className="absolute left-0 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md transition hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-30"
+          className="absolute left-0 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md transition hover:bg-slate-50"
         >
           <ChevronLeft size={20} />
         </button>
@@ -119,8 +118,7 @@ export function FeaturedCollectionsCarousel() {
           type="button"
           aria-label="Next collections"
           onClick={goNext}
-          disabled={index === maxIndex}
-          className="absolute right-0 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md transition hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-30"
+          className="absolute right-0 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md transition hover:bg-slate-50"
         >
           <ChevronRight size={20} />
         </button>
