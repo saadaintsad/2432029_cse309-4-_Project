@@ -48,6 +48,17 @@ export function phoneToAuthEmail(phone: string): string {
   return `${normalizePhone(phone)}@${CUSTOMER_AUTH_EMAIL_DOMAIN}`;
 }
 
+/** Normalizes free-text fabric variant names to a consistent case (e.g. "voile",
+ * "VOILE", "  voile  " all become "Voile") so the same variant typed differently
+ * by different admins is stored, matched, and displayed identically everywhere. */
+export function normalizeVariant(variant: string): string {
+  return variant
+    .trim()
+    .replace(/\s+/g, " ")
+    .toLowerCase()
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 /** Extracts the "<bucket>/<path>" storage key from a Supabase Storage public URL. */
 export function storagePathFromPublicUrl(publicUrl: string, bucket: string): string | null {
   const marker = `/storage/v1/object/public/${bucket}/`;

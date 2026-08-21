@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase-server";
 import { requireAdmin } from "@/lib/auth";
+import { normalizeVariant } from "@/lib/utils";
 
 const PUBLIC_FIELDS =
   "id, variant, color, suta_count, qty_than, selling_price_per_than, created_at, inventory_images(id, image_url)";
@@ -52,7 +53,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
 
-  const variant = typeof body.variant === "string" ? body.variant.trim() : "";
+  const variant =
+    typeof body.variant === "string" ? normalizeVariant(body.variant) : "";
   const color = typeof body.color === "string" ? body.color.trim() : "";
   const location = typeof body.location === "string" ? body.location.trim() : "";
   const supplierName = typeof body.supplier_name === "string" ? body.supplier_name.trim() : "";
