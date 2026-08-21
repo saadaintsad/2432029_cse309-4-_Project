@@ -22,12 +22,19 @@ export default async function HomePage() {
       <PublicHeader />
 
       {/* Hero — compact, so the hero + top of Featured Collections both fit
-          on first load without scrolling (matches reference1.jpg's proportions) */}
-      <section className="relative flex min-h-[430px] flex-col overflow-hidden lg:flex-row">
-        {/* Warm sandy background photo, full-bleed behind everything */}
-        <div className="absolute inset-0 z-0">
+          on first load without scrolling (matches reference1.jpg's proportions).
+          Background and models are one single pre-composited photo (hero-banner.png)
+          rather than two separately-scaled layers — stacking a transparent model
+          cutout over a separate background photo previously caused a scale
+          mismatch between the two (models sized against their column, background
+          sized against the whole hero, with no shared reference point), so a
+          single photo is used here instead. */}
+      <section className="relative flex min-h-[430px] flex-col overflow-hidden bg-[#f1e0c0]">
+        {/* Desktop: full-bleed photo behind the whole hero, text overlays its
+            left half exactly as photographed. */}
+        <div className="absolute inset-0 z-0 hidden lg:block">
           <Image
-            src="/images/img6.png"
+            src="/images/hero-banner.png"
             alt=""
             fill
             priority
@@ -40,9 +47,21 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-white/40 to-transparent" />
         </div>
 
-        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col lg:flex-row">
-          {/* Text content — 55% on desktop */}
-          <div className="flex w-full flex-col items-center justify-center px-6 py-6 text-center lg:w-[55%] lg:items-start lg:justify-start lg:px-10 lg:pt-10 lg:text-left">
+        {/* Mobile: the same photo cropped to a short banner up top, biased
+            toward the models on the right side of the frame. */}
+        <div className="relative h-[210px] w-full overflow-hidden lg:hidden">
+          <Image
+            src="/images/hero-banner.png"
+            alt="New N Islam wholesale cloth collection — models wearing our fabrics"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[70%_35%]"
+          />
+        </div>
+
+        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col">
+          <div className="flex w-full flex-1 flex-col items-center justify-center px-6 py-6 text-center lg:w-[55%] lg:items-start lg:justify-start lg:px-10 lg:pt-10 lg:text-left">
             <h1 className="font-playfair text-[36px] font-bold leading-tight text-[#1a2340] lg:text-[52px]">
               {shop.shop_name}
             </h1>
@@ -74,21 +93,6 @@ export default async function HomePage() {
                 phone={shop.phone}
                 address={shop.address}
                 aboutUs={shop.about_us}
-              />
-            </div>
-          </div>
-
-          {/* Model images — 45% on desktop, anchored to the bottom edge, full
-              image visible (contain) so heads stay in frame near the top */}
-          <div className="relative order-first h-[240px] w-full lg:order-2 lg:h-auto lg:w-[45%]">
-            <div className="absolute inset-x-0 bottom-0 h-[82%]">
-              <Image
-                src="/images/img5.png"
-                alt="New N Islam wholesale cloth collection — models wearing our fabrics"
-                fill
-                priority
-                sizes="(min-width: 1024px) 45vw, 100vw"
-                className="object-contain object-bottom"
               />
             </div>
           </div>
