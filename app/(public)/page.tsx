@@ -28,10 +28,17 @@ export default async function HomePage() {
           cutout over a separate background photo previously caused a scale
           mismatch between the two (models sized against their column, background
           sized against the whole hero, with no shared reference point), so a
-          single photo is used here instead. */}
+          single photo is used here instead.
+
+          Desktop and mobile are genuinely different compositions (text overlaid
+          on the full photo vs. text overlaid on a shorter cropped banner with
+          smaller type), so each renders its own text block rather than reusing
+          one set of responsive classes — each is hidden at the other breakpoint
+          via `hidden lg:flex` / `lg:hidden`, matching the same pattern already
+          used for the two background <Image> instances below. */}
       <section className="relative flex min-h-[430px] flex-col overflow-hidden bg-[#f1e0c0]">
-        {/* Desktop: full-bleed photo behind the whole hero, text overlays its
-            left half exactly as photographed. */}
+        {/* ===== Desktop (lg+): full-bleed photo, text overlaid on its left
+            half exactly as photographed. ===== */}
         <div className="absolute inset-0 z-0 hidden lg:block">
           <Image
             src="/images/hero-banner.png"
@@ -47,30 +54,17 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-white/40 to-transparent" />
         </div>
 
-        {/* Mobile: the same photo cropped to a short banner up top, biased
-            toward the models on the right side of the frame. */}
-        <div className="relative h-[210px] w-full overflow-hidden lg:hidden">
-          <Image
-            src="/images/hero-banner.png"
-            alt="New N Islam wholesale cloth collection — models wearing our fabrics"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-[70%_35%]"
-          />
-        </div>
-
-        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col">
-          <div className="flex w-full flex-1 flex-col items-center justify-center px-6 py-6 text-center lg:w-[55%] lg:items-start lg:justify-start lg:px-10 lg:pt-10 lg:text-left">
-            <h1 className="font-playfair text-[36px] font-bold leading-tight text-[#1a2340] lg:text-[52px]">
+        <div className="relative z-10 mx-auto hidden w-full max-w-7xl flex-1 flex-col lg:flex">
+          <div className="flex w-full flex-1 flex-col justify-start px-10 pt-10 text-left lg:w-[55%]">
+            <h1 className="font-playfair text-[52px] font-bold leading-tight text-[#1a2340]">
               {shop.shop_name}
             </h1>
-            <p className="mt-1 text-sm font-medium tracking-[0.5px] text-amber-700 sm:text-base">
+            <p className="mt-1 text-base font-medium tracking-[0.5px] text-amber-700">
               Wholesale Cloth Merchants — Islampur, Old Dhaka
             </p>
             <h2
               lang="bn"
-              className="mt-3 max-w-xl font-hind-siliguri text-[30px] font-bold leading-tight tracking-tight text-[#1a2340] lg:text-[42px]"
+              className="mt-3 max-w-xl font-hind-siliguri text-[42px] font-bold leading-tight tracking-tight text-[#1a2340]"
             >
               সাশ্রয়ী দামে প্রিমিয়াম পাইকারি কাপড়
             </h2>
@@ -81,11 +75,9 @@ export default async function HomePage() {
               ইসলামপুরের শতভাগ মানসম্মত পপলিন, ভয়েল, লিনেন ও বেক্সি ভয়েল কাপড়ের
               পাইকারি বুকিং ও সার্বক্ষণিক স্টক আপডেট।
             </p>
-            <div className="mt-4 flex w-full flex-col gap-2.5 lg:w-auto lg:flex-row">
-              <Link href="/browse" className="w-full lg:w-auto">
-                <Button className="w-full px-8 py-[14px] text-base lg:w-auto">
-                  Browse Stock Catalog
-                </Button>
+            <div className="mt-4 flex gap-2.5">
+              <Link href="/browse">
+                <Button className="px-8 py-[14px] text-base">Browse Stock Catalog</Button>
               </Link>
               <AboutUsButton
                 shopName={shop.shop_name}
@@ -95,6 +87,60 @@ export default async function HomePage() {
                 aboutUs={shop.about_us}
               />
             </div>
+          </div>
+        </div>
+
+        {/* ===== Mobile (below lg): the same photo cropped to a shorter
+            banner, with the heading text overlaid on its left side at
+            smaller sizes (there isn't room to also show the full-width
+            scene, so the crop favors keeping the models at least partly in
+            frame on the right while leaving open background on the left for
+            the text to sit on). The two buttons render below the photo,
+            not overlaid on it. ===== */}
+        <div className="lg:hidden">
+          <div className="relative h-[320px] w-full overflow-hidden">
+            <Image
+              src="/images/hero-banner.png"
+              alt="New N Islam wholesale cloth collection — models wearing our fabrics"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-[55%_center]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-white/60 via-white/25 to-transparent" />
+            <div className="absolute inset-0 flex flex-col justify-center px-5 py-4">
+              <h1 className="font-playfair text-[26px] font-bold leading-tight text-[#1a2340]">
+                {shop.shop_name}
+              </h1>
+              <p className="mt-1 max-w-[200px] text-xs font-medium tracking-[0.5px] text-amber-700">
+                Wholesale Cloth Merchants — Islampur, Old Dhaka
+              </p>
+              <h2
+                lang="bn"
+                className="mt-2 max-w-[200px] font-hind-siliguri text-[19px] font-bold leading-tight tracking-tight text-[#1a2340]"
+              >
+                সাশ্রয়ী দামে প্রিমিয়াম পাইকারি কাপড়
+              </h2>
+              <p
+                lang="bn"
+                className="mt-1 max-w-[200px] font-hind-siliguri text-[11px] leading-[1.5] text-[#4a5568]"
+              >
+                ইসলামপুরের শতভাগ মানসম্মত পপলিন, ভয়েল, লিনেন ও বেক্সি ভয়েল কাপড়ের
+                পাইকারি বুকিং ও সার্বক্ষণিক স্টক আপডেট।
+              </p>
+            </div>
+          </div>
+          <div className="flex w-full flex-col gap-2.5 bg-[#f1e0c0] px-6 py-4">
+            <Link href="/browse" className="w-full">
+              <Button className="w-full px-8 py-[14px] text-base">Browse Stock Catalog</Button>
+            </Link>
+            <AboutUsButton
+              shopName={shop.shop_name}
+              ownerName={shop.owner_name}
+              phone={shop.phone}
+              address={shop.address}
+              aboutUs={shop.about_us}
+            />
           </div>
         </div>
       </section>
