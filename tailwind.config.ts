@@ -15,6 +15,7 @@ const config: Config = {
       fontFamily: {
         inter: ["var(--font-inter)", "sans-serif"],
         "hind-siliguri": ["var(--font-hind-siliguri)", "sans-serif"],
+        playfair: ["var(--font-playfair)", "serif"],
       },
     },
   },

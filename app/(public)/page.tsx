@@ -23,23 +23,42 @@ export default async function HomePage() {
 
       {/* Hero — compact, so the hero + top of Featured Collections both fit
           on first load without scrolling (matches reference1.jpg's proportions) */}
-      <section className="relative flex min-h-[430px] flex-col overflow-hidden bg-gradient-to-b from-[#fdf8f4] to-[#fef3e8] lg:flex-row">
-        <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col lg:flex-row">
+      <section className="relative flex min-h-[430px] flex-col overflow-hidden lg:flex-row">
+        {/* Warm sandy background photo, full-bleed behind everything */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/img6.png"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+          {/* Subtle white wash on the left, fading out toward the models on
+              the right, so the dark-navy text keeps enough contrast against
+              the textured photo behind it. */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/40 to-transparent" />
+        </div>
+
+        <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col lg:flex-row">
           {/* Text content — 55% on desktop */}
           <div className="flex w-full flex-col items-center justify-center px-6 py-6 text-center lg:w-[55%] lg:items-start lg:justify-start lg:px-10 lg:pt-10 lg:text-left">
-            <h1 className="text-[28px] font-bold leading-tight text-slate-900 lg:text-[48px]">
+            <h1 className="font-playfair text-[36px] font-bold leading-tight text-[#1a2340] lg:text-[52px]">
               {shop.shop_name}
             </h1>
-            <p className="mt-1 text-sm font-semibold text-amber-700 sm:text-base">
+            <p className="mt-1 text-sm font-medium tracking-[0.5px] text-amber-700 sm:text-base">
               Wholesale Cloth Merchants — Islampur, Old Dhaka
             </p>
             <h2
               lang="bn"
-              className="mt-3 max-w-xl font-hind-siliguri text-[28px] font-bold leading-tight tracking-tight text-slate-900 lg:text-[39px]"
+              className="mt-3 max-w-xl font-hind-siliguri text-[30px] font-bold leading-tight tracking-tight text-[#1a2340] lg:text-[42px]"
             >
               সাশ্রয়ী দামে প্রিমিয়াম পাইকারি কাপড়
             </h2>
-            <p lang="bn" className="mt-2 max-w-xl font-hind-siliguri text-sm text-slate-600 sm:text-base">
+            <p
+              lang="bn"
+              className="mt-2 max-w-xl font-hind-siliguri text-[16px] leading-[1.7] text-[#4a5568]"
+            >
               ইসলামপুরের শতভাগ মানসম্মত পপলিন, ভয়েল, লিনেন ও বেক্সি ভয়েল কাপড়ের
               পাইকারি বুকিং ও সার্বক্ষণিক স্টক আপডেট।
             </p>
@@ -63,7 +82,7 @@ export default async function HomePage() {
               image visible (contain) so heads stay in frame near the top */}
           <div className="relative order-first h-[240px] w-full lg:order-2 lg:h-auto lg:w-[45%]">
             <Image
-              src="/images/img04.png"
+              src="/images/img5.png"
               alt="New N Islam wholesale cloth collection — models wearing our fabrics"
               fill
               priority

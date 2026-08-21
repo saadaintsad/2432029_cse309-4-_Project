@@ -33,7 +33,7 @@ export function AboutUsButton({
       <Button
         type="button"
         variant="secondary"
-        className="w-full px-8 py-[14px] text-base lg:w-auto"
+        className="w-full border border-slate-800 bg-white px-8 py-[14px] text-base text-slate-900 hover:bg-slate-50 lg:w-auto"
         onClick={() => setOpen(true)}
       >
         About Us
