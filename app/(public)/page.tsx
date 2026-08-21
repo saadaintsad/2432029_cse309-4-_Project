@@ -81,14 +81,16 @@ export default async function HomePage() {
           {/* Model images — 45% on desktop, anchored to the bottom edge, full
               image visible (contain) so heads stay in frame near the top */}
           <div className="relative order-first h-[240px] w-full lg:order-2 lg:h-auto lg:w-[45%]">
-            <Image
-              src="/images/img5.png"
-              alt="New N Islam wholesale cloth collection — models wearing our fabrics"
-              fill
-              priority
-              sizes="(min-width: 1024px) 45vw, 100vw"
-              className="object-contain object-bottom"
-            />
+            <div className="absolute inset-x-0 bottom-0 h-[82%]">
+              <Image
+                src="/images/img5.png"
+                alt="New N Islam wholesale cloth collection — models wearing our fabrics"
+                fill
+                priority
+                sizes="(min-width: 1024px) 45vw, 100vw"
+                className="object-contain object-bottom"
+              />
+            </div>
           </div>
         </div>
       </section>
