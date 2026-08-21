@@ -59,8 +59,8 @@ export default async function HomePage() {
             <h1 className="font-playfair text-[52px] font-bold leading-tight text-[#1a2340]">
               {shop.shop_name}
             </h1>
-            <p className="mt-1 text-base font-medium tracking-[0.5px] text-amber-700">
-              Wholesale Cloth Merchants — Islampur, Old Dhaka
+            <p className="mt-1 text-base font-medium italic tracking-[0.5px] text-amber-700">
+              Wholesale Cloth Merchant — Islampur, Old Dhaka
             </p>
             <h2
               lang="bn"
@@ -112,8 +112,8 @@ export default async function HomePage() {
               <h1 className="font-playfair text-[26px] font-bold leading-tight text-[#1a2340]">
                 {shop.shop_name}
               </h1>
-              <p className="mt-1 max-w-[200px] text-xs font-medium tracking-[0.5px] text-amber-700">
-                Wholesale Cloth Merchants — Islampur, Old Dhaka
+              <p className="mt-1 max-w-[200px] text-xs font-medium italic tracking-[0.5px] text-amber-700">
+                Wholesale Cloth Merchant — Islampur, Old Dhaka
               </p>
               <h2
                 lang="bn"
