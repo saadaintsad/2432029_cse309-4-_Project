@@ -6,18 +6,13 @@ import { Card } from "@/components/ui/Card";
 import { PublicHeader } from "@/components/public/PublicHeader";
 import { TrackOrderInline } from "@/components/public/TrackOrderInline";
 import { AboutUsButton } from "@/components/public/AboutUsButton";
+import { FeaturedCollectionsCarousel } from "@/components/public/FeaturedCollectionsCarousel";
 import { getShopSettings } from "@/lib/shop-settings";
 
 // shop_settings changes (Settings -> Shop Details) must show up immediately
 // per spec — see lib/supabase-server.ts for why this alone isn't quite
 // enough (createServiceRoleClient already forces cache:"no-store" too).
 export const dynamic = "force-dynamic";
-
-const COLLECTIONS = [
-  { name: "Premium Poplin", image: "/images/poplin.jpg" },
-  { name: "Printed Voile", image: "/images/chapa.jpg" },
-  { name: "Exclusive Linen", image: "/images/Cotton-Voile-Fabric.jpg" },
-];
 
 export default async function HomePage() {
   const shop = await getShopSettings();
@@ -83,31 +78,7 @@ export default async function HomePage() {
       <div className="mx-auto h-px w-full max-w-7xl bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
 
       {/* Featured Collections */}
-      <section className="mx-auto w-full max-w-7xl px-6 py-8">
-        <h2 className="mb-5 text-center text-2xl font-bold text-slate-900 sm:text-3xl">
-          Featured Collections
-        </h2>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-          {COLLECTIONS.map((c) => (
-            <div
-              key={c.name}
-              className="group relative h-[280px] w-full overflow-hidden rounded-xl shadow-md"
-            >
-              <Image
-                src={c.image}
-                alt={c.name}
-                fill
-                sizes="(min-width: 640px) 33vw, 100vw"
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-5">
-                <p className="text-[20px] font-bold text-white">{c.name}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <FeaturedCollectionsCarousel />
 
       {/* Track Order */}
       <section className="mx-auto w-full max-w-3xl px-6 pb-8">

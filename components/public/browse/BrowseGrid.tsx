@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import { Alert } from "@/components/ui/Alert";
@@ -18,9 +19,10 @@ interface BrowseItem {
 }
 
 export function BrowseGrid() {
+  const searchParams = useSearchParams();
   const [items, setItems] = useState<BrowseItem[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [variant, setVariant] = useState("");
+  const [variant, setVariant] = useState(searchParams.get("variant") ?? "");
   const [color, setColor] = useState("");
 
   const load = useCallback(async () => {
