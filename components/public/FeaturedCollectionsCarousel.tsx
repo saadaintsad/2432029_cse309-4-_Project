@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, TouchEvent } from "react";
+import { useEffect, useRef, useState, TouchEvent, TransitionEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -19,11 +19,19 @@ const COLLECTIONS: Collection[] = [
   { name: "Polyester", image: "/images/polester.jpg", variant: "Polyester" },
 ];
 
+const N = COLLECTIONS.length;
+// Three consecutive copies so the track can keep sliding in one direction
+// past the "end" (or "start") — it's really scrolling into a clone that
+// looks identical to the real item it stands in for, which is what lets the
+// snap back to the middle copy happen with no visible jump.
+const LOOPED_COLLECTIONS = [...COLLECTIONS, ...COLLECTIONS, ...COLLECTIONS];
+
 const SWIPE_THRESHOLD = 40;
 
 export function FeaturedCollectionsCarousel() {
   const [cardsPerView, setCardsPerView] = useState(3);
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(N);
+  const [animate, setAnimate] = useState(true);
   const touchStartX = useRef<number | null>(null);
 
   useEffect(() => {
@@ -34,18 +42,49 @@ export function FeaturedCollectionsCarousel() {
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  const maxIndex = Math.max(0, COLLECTIONS.length - cardsPerView);
-
+  // A breakpoint change alters how many cards line up per position, so
+  // there's no sane scroll position to preserve across it — just snap back
+  // to the first real card instead of trying to translate one into the other.
   useEffect(() => {
-    setIndex((i) => Math.min(i, maxIndex));
-  }, [maxIndex]);
+    setAnimate(false);
+    setIndex(N);
+  }, [cardsPerView]);
+
+  // Re-enable the transition on the next paint after a no-animation jump,
+  // so the jump itself renders instantly but the following click animates
+  // normally again.
+  useEffect(() => {
+    if (animate) return;
+    const id = requestAnimationFrame(() => {
+      const id2 = requestAnimationFrame(() => setAnimate(true));
+      return () => cancelAnimationFrame(id2);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [animate]);
 
   function goPrev() {
-    setIndex((i) => (i === 0 ? maxIndex : i - 1));
+    setAnimate(true);
+    setIndex((i) => Math.max(0, i - 1));
   }
 
   function goNext() {
-    setIndex((i) => (i === maxIndex ? 0 : i + 1));
+    setAnimate(true);
+    setIndex((i) => Math.min(3 * N - cardsPerView, i + 1));
+  }
+
+  // Once an animated scroll has carried the track a full lap into one of
+  // the clone copies, jump back by one array-length (N) once that scroll
+  // has visibly finished — the clone position and the real position it
+  // maps to render identically, so the jump is invisible.
+  function handleTransitionEnd(e: TransitionEvent<HTMLDivElement>) {
+    if (e.target !== e.currentTarget || e.propertyName !== "transform") return;
+    if (index >= 2 * N) {
+      setAnimate(false);
+      setIndex(index - N);
+    } else if (index < N) {
+      setAnimate(false);
+      setIndex(index + N);
+    }
   }
 
   function handleTouchStart(e: TouchEvent<HTMLDivElement>) {
@@ -84,12 +123,13 @@ export function FeaturedCollectionsCarousel() {
           onTouchEnd={handleTouchEnd}
         >
           <div
-            className="flex transition-transform duration-300 ease-out"
+            className={`flex ${animate ? "transition-transform duration-300 ease-out" : ""}`}
             style={{ transform: `translateX(-${index * itemWidthPct}%)` }}
+            onTransitionEnd={handleTransitionEnd}
           >
-            {COLLECTIONS.map((c) => (
+            {LOOPED_COLLECTIONS.map((c, i) => (
               <div
-                key={c.name}
+                key={i}
                 className="shrink-0 px-2"
                 style={{ width: `${itemWidthPct}%` }}
               >
