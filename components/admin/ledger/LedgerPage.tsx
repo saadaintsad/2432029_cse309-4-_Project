@@ -67,6 +67,11 @@ export function LedgerPage() {
     load();
   }, [load]);
 
+  function handleClearFilters() {
+    setDateFrom("");
+    setDateTo("");
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -149,7 +154,7 @@ export function LedgerPage() {
       )}
 
       <Card>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-4">
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-slate-700">Category</label>
             <select
@@ -182,6 +187,16 @@ export function LedgerPage() {
               onChange={(e) => setDateTo(e.target.value)}
               className="rounded-md border border-slate-300 px-3 py-2 text-sm outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-600/30"
             />
+          </div>
+          <div className="flex flex-col justify-end">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={handleClearFilters}
+              className="px-3 py-2 text-sm"
+            >
+              Clear Filters
+            </Button>
           </div>
         </div>
       </Card>
