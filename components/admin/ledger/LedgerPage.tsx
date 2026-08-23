@@ -22,6 +22,10 @@ interface Summary {
   expenses_by_category: Record<string, number>;
   total_payables_due: number;
   total_customer_receivables: number;
+  total_revenue: number;
+  total_cash_received: number;
+  gross_profit: number;
+  net_profit: number;
 }
 
 export function LedgerPage() {
@@ -71,6 +75,39 @@ export function LedgerPage() {
       </div>
 
       {error && <Alert variant="error">{error}</Alert>}
+
+      {summary && (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Card>
+            <p className="text-xs text-slate-500">Total Revenue</p>
+            <p className="mt-1 text-xl font-semibold text-slate-900">
+              {formatCurrency(summary.total_revenue)}
+            </p>
+          </Card>
+          <Card>
+            <p className="text-xs text-slate-500">Total Cash Received</p>
+            <p className="mt-1 text-xl font-semibold text-slate-900">
+              {formatCurrency(summary.total_cash_received)}
+            </p>
+          </Card>
+          <Card>
+            <p className="text-xs text-slate-500">Gross Profit</p>
+            <p className="mt-1 text-xl font-semibold text-slate-900">
+              {formatCurrency(summary.gross_profit)}
+            </p>
+          </Card>
+          <Card>
+            <p className="text-xs text-slate-500">Net Profit / Loss</p>
+            <p
+              className={`mt-1 text-xl font-semibold ${
+                summary.net_profit >= 0 ? "text-emerald-700" : "text-red-600"
+              }`}
+            >
+              {formatCurrency(summary.net_profit)}
+            </p>
+          </Card>
+        </div>
+      )}
 
       {summary && (
         <div className="grid gap-4 sm:grid-cols-3">
