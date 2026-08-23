@@ -1,7 +1,10 @@
-Last Updated: August 21, 2026 (later same day, tenth session)
+Last Updated: August 21, 2026 (later same day, eleventh session)
 Completed Phases: Phase 0 through Phase 8, plus pre-Phase-9 fixes below. Every spec module is built.
 Current Phase: Phase 9 — Final Testing (not started) — the last phase in the entire spec.
-Last Thing Done: Four new financial summary cards on /admin/ledger (commit 096cb00), pushed directly per your instruction — Total Revenue, Total Cash Received, Gross Profit, Net Profit/Loss, all server-computed in GET /api/ledger/summary, no new tables:
+Last Thing Done: Clear Filters button on /admin/ledger's date filter row (commit 93bb296), pushed directly per your instruction. Small addition: a 4th column next to Category/From/To in components/admin/ledger/LedgerPage.tsx's filter Card, resetting `dateFrom`/`dateTo` to empty strings on click — the page's existing `load()` effect was already keyed on those two state values, so clearing them reactively refetches both the summary cards and the expense table with no date filter, no extra wiring needed. Left the Category filter untouched, matching the literal scope of your request ("resets both the From and To date fields").
+  VERIFIED in a real browser: set From/To to a real range, clicked Clear Filters, confirmed both date inputs actually emptied (not just visually, checked `.inputValue()`), confirmed the resulting `/api/ledger/summary` request had no date_from/date_to query params, and confirmed Total Revenue reverted to the unfiltered ৳3,750. Checked mobile (375px) too: the button stacks cleanly into its own full-width row below `sm`, matching the other filter fields' single-column mobile layout — the horizontal overflow Playwright reported there is the already-documented pre-existing AdminShell sidebar issue (fixed 224px, no mobile collapse, flagged in this file since the Color Slip session), not something this change introduced. `tsc --noEmit`/`next lint` clean, full page regression sweep clean, zero console/page errors.
+
+Previously — Four new financial summary cards on /admin/ledger (commit 096cb00), pushed directly per your instruction — Total Revenue, Total Cash Received, Gross Profit, Net Profit/Loss, all server-computed in GET /api/ledger/summary, no new tables:
   - total_revenue: sum(orders.total_amount) for status IN (CONFIRMED, ON_THE_WAY, DELIVERED), filtered by orders.confirmed_at.
   - total_cash_received: sum(customer_payments.amount), filtered by customer_payments.created_at.
   - gross_profit: total_revenue minus the INVENTORY-category slice of expenses (reused the endpoint's existing `expenses_by_category` breakdown rather than a second query).
@@ -252,7 +255,7 @@ Files Modified This Session:
   - app/(public)/page.tsx (hero rebuilt around hero-banner.png; desktop/mobile now separate compositions; subtitle text/italic fix)
   - components/public/FeaturedCollectionsCarousel.tsx (continuous infinite loop via tripled-array + invisible reset technique)
   - app/api/ledger/summary/route.ts (added total_revenue, total_cash_received, gross_profit, net_profit)
-  - components/admin/ledger/LedgerPage.tsx (four new summary cards)
+  - components/admin/ledger/LedgerPage.tsx (four new summary cards, then a Clear Filters button)
 Reference Files:
   - instruction/NewNIslam_Spec_v2.md — primary implementation guide
   - instruction/New N Islam — Complete Implementation Spec — business context
