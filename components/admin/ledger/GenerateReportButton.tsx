@@ -81,7 +81,13 @@ export default function GenerateReportButton({
 
   return (
     <div className="flex items-center gap-2">
-      <Button type="button" variant="secondary" onClick={handleClick} loading={loading}>
+      <Button
+        type="button"
+        variant="secondary"
+        className="border border-slate-300 bg-white hover:bg-slate-50"
+        onClick={handleClick}
+        loading={loading}
+      >
         {loading ? "Preparing Report…" : "Generate Report"}
       </Button>
       {error && <span className="text-xs text-red-600">{error}</span>}

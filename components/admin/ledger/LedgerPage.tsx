@@ -16,7 +16,12 @@ import { AddExpenseModal } from "./AddExpenseModal";
 const GenerateReportButton = dynamic(() => import("./GenerateReportButton"), {
   ssr: false,
   loading: () => (
-    <Button type="button" variant="secondary" disabled>
+    <Button
+      type="button"
+      variant="secondary"
+      className="border border-slate-300 bg-white"
+      disabled
+    >
       Preparing Report…
     </Button>
   ),
