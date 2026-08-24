@@ -92,4 +92,43 @@ export const pdfStyles = StyleSheet.create({
   colorRatioValue: {
     width: "40%",
   },
+  // ---- Ledger financial report ----
+  reportTitle: {
+    fontSize: 14,
+    fontWeight: 700,
+    marginTop: 10,
+  },
+  sectionHeading: {
+    fontSize: 12,
+    fontWeight: 700,
+    marginTop: 18,
+    marginBottom: 6,
+  },
+  emptyNote: {
+    color: "#64748b",
+  },
+  summaryList: {
+    marginTop: 4,
+  },
+  summaryListRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 4,
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#cbd5e1",
+  },
+  summaryListLabel: {
+    color: "#334155",
+  },
+  summaryListValue: {
+    fontWeight: 700,
+  },
+  colCustomerName: { width: "30%" },
+  colPaymentDate: { width: "20%" },
+  colPaymentAmount: { width: "25%", textAlign: "right", paddingRight: 10 },
+  colPaymentMethod: { width: "25%" },
+  colExpenseDate: { width: "18%" },
+  colExpenseCategory: { width: "20%" },
+  colExpenseDescription: { width: "37%" },
+  colExpenseAmount: { width: "25%", textAlign: "right" },
 });

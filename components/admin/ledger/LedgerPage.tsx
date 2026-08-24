@@ -1,12 +1,26 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { EXPENSE_CATEGORIES } from "@/lib/constants";
 import { AddExpenseModal } from "./AddExpenseModal";
+
+// @react-pdf/renderer touches browser-only APIs and must be built entirely
+// within one client-only module (see GenerateReportButton.tsx) — ssr:false
+// keeps this whole chunk out of the server bundle (spec: "Generated
+// client-side only — no server-side PDF generation").
+const GenerateReportButton = dynamic(() => import("./GenerateReportButton"), {
+  ssr: false,
+  loading: () => (
+    <Button type="button" variant="secondary" disabled>
+      Preparing Report…
+    </Button>
+  ),
+});
 
 interface ExpenseRow {
   id: string;
@@ -76,7 +90,12 @@ export function LedgerPage() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-lg font-semibold text-slate-900">Ledger</h1>
-        <Button onClick={() => setShowAddModal(true)}>Add Expense</Button>
+        <div className="flex items-center gap-2">
+          {summary && (
+            <GenerateReportButton dateFrom={dateFrom} dateTo={dateTo} summary={summary} />
+          )}
+          <Button onClick={() => setShowAddModal(true)}>Add Expense</Button>
+        </div>
       </div>
 
       {error && <Alert variant="error">{error}</Alert>}
