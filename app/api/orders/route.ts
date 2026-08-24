@@ -43,13 +43,6 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const adminSession = await requireAdmin(request);
-  const customerId = adminSession ? null : await getCustomerId();
-
-  if (!adminSession && !customerId) {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
-  }
-
   let body: Record<string, unknown>;
   try {
     body = await request.json();
@@ -59,8 +52,22 @@ export async function POST(request: NextRequest) {
 
   const supabase = createServiceRoleClient();
 
+  // The customer storefront and the admin panel share this endpoint, so which
+  // flow applies is decided by the payload shape (customer requests send a
+  // single inventory_id/qty_than; admin offline orders send an items[]
+  // array) rather than by whether an admin session merely exists — an admin
+  // testing or using the storefront in the same browser still has a valid
+  // admin JWT cookie, and prioritizing that over the actual request shape
+  // routed genuine customer bookings into the admin-only branch by mistake.
+  const isAdminShapedPayload = Array.isArray(body.items);
+
   // ---- Customer flow: submit an ONLINE request (single item, PENDING). ----
-  if (!adminSession) {
+  if (!isAdminShapedPayload) {
+    const customerId = await getCustomerId();
+    if (!customerId) {
+      return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+    }
+
     const inventoryId = typeof body.inventory_id === "string" ? body.inventory_id : "";
     const qtyThan = Number(body.qty_than);
     const note = typeof body.note === "string" ? body.note.trim() : "";
@@ -93,6 +100,11 @@ export async function POST(request: NextRequest) {
   }
 
   // ---- Admin flow: create an OFFLINE order (multi-item, CONFIRMED immediately). ----
+  const adminSession = await requireAdmin(request);
+  if (!adminSession) {
+    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+  }
+
   const items = Array.isArray(body.items) ? body.items : [];
   const note = typeof body.note === "string" ? body.note.trim() : "";
   let targetCustomerId = typeof body.customer_id === "string" ? body.customer_id : "";
