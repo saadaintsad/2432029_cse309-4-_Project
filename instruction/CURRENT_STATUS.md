@@ -1,7 +1,11 @@
-Last Updated: August 24, 2026 (later same day, third session)
+Last Updated: August 24, 2026 (later same day, fourth session)
 Completed Phases: Phase 0 through Phase 8, plus pre-Phase-9 fixes below. Every spec module is built.
 Current Phase: Phase 9 — Final Testing (not started) — the last phase in the entire spec.
-Last Thing Done: Added a "Generate Report" PDF button to /admin/ledger, next to Add Expense (commit a4df70c), pushed after fixing two real bugs the verification caught.
+Last Thing Done: Fixed the Generate Report button looking colorless (commit 5abe828), pushed after verifying. You said it "has no color... doesn't look like any button" — the plain secondary variant (bg-slate-100) sits almost flush against AdminShell's own page background (bg-slate-50), so at a glance it read as plain text rather than a clickable button, especially next to the bold amber Add Expense button right beside it.
+  Gave it (components/admin/ledger/GenerateReportButton.tsx) a white fill + visible slate-300 border via a className override on that one Button instance — not a change to the shared Button component's secondary variant itself, so no other secondary button elsewhere in the app is affected. Matched the same styling on the dynamic-import loading fallback in LedgerPage.tsx too, so there's no visible style flash during the brief moment the chunk is loading.
+  VERIFIED with computed styles read via getComputedStyle (background rgb(255,255,255), border rgb(203,213,225) at 1px) and a cropped screenshot showing the button now clearly outlined against the page, sitting next to Add Expense. Re-confirmed clicking it still generates and downloads a valid PDF after the style change (checked the %PDF header again, not just that it looked right). `tsc --noEmit`/`next lint` clean, full page regression sweep clean, zero console/page errors.
+
+Previously — Added a "Generate Report" PDF button to /admin/ledger, next to Add Expense (commit a4df70c), pushed after fixing two real bugs the verification caught.
   New GET /api/ledger/report returns shop_settings, a date-filtered expenses list, and a date-filtered customer_payments list joined to customer name — deliberately independent of the Ledger page's category filter (the report is a complete financial summary for the date range, not whatever category happens to be selected on screen; confirmed /api/ledger/summary already ignores `category` server-side too, so it was safe to reuse that page's already-loaded `summary` state directly for the report's five top-line figures instead of recomputing them).
   components/pdf/LedgerReportPDF.tsx renders the report (header/Financial Summary/Payments Received/Expenses, multi-page by default since react-pdf paginates overflow automatically) using the same shared `pdfStyles` as Cash Memo/Color Slip, with a handful of new report-specific column-width and summary-list styles added to that shared file. components/admin/ledger/GenerateReportButton.tsx is the client-only entry point (dynamically imported with `ssr:false`, same architecture as CashMemoDownload.tsx) — since there's no record to create first (unlike Cash Memo/Color Slip), it fetches the report data and generates+downloads the PDF in one click via the imperative `pdf().toBlob()` API rather than a PDFDownloadLink needing a second click, showing "Preparing Report…" while in flight.
   Two real bugs caught during verification against live data (not just code review), both fixed before pushing:
@@ -280,7 +284,8 @@ Files Modified This Session:
   - components/pdf/LedgerReportPDF.tsx (new — Generate Report PDF document)
   - components/pdf/styles.ts (added report-specific column/summary-list styles; removed fontStyle:"italic" from emptyNote — crashed PDF gen, no italic variant registered for Noto Sans Bengali)
   - components/admin/ledger/GenerateReportButton.tsx (new — client-only fetch+generate+download)
-  - components/admin/ledger/LedgerPage.tsx (Generate Report button wired in next to Add Expense)
+  - components/admin/ledger/LedgerPage.tsx (Generate Report button wired in next to Add Expense, then styled fix — see below)
+  - components/admin/ledger/GenerateReportButton.tsx, LedgerPage.tsx (bug fix — button given a visible white fill + border, was blending into the page background)
 Reference Files:
   - instruction/NewNIslam_Spec_v2.md — primary implementation guide
   - instruction/New N Islam — Complete Implementation Spec — business context
